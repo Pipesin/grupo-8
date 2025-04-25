@@ -1,0 +1,81 @@
+package modelo;
+
+import interfaces.ILista;
+import interfaces.INodo;
+
+public class Lista implements ILista {
+    private INodo primero;
+    private INodo ultimo; 
+
+    public Lista() {
+        this.primero = null;
+        this.ultimo = null;
+    }
+
+    @Override
+    public boolean esVacia() {
+        return primero == null;
+    }
+
+    @Override
+    public void insertarPrimero(int dato) {
+        INodo nuevo = new Nodo(dato);
+        if (esVacia()) {
+            primero = nuevo;
+            ultimo = nuevo; 
+        } else {
+            nuevo.setSiguiente(primero);
+            primero.setAnterior(nuevo);
+            primero = nuevo;
+        }
+    }
+
+    @Override
+    public void insertarUltimo(int dato) {
+        INodo nuevo = new Nodo(dato);
+        if (esVacia()) {
+            primero = nuevo;
+            ultimo = nuevo;
+        } else {
+            nuevo.setAnterior(ultimo);
+            ultimo.setSiguiente(nuevo);
+            ultimo = nuevo;
+        }
+    }
+
+    @Override
+    public void eliminarPrimero() {
+        if (!esVacia()) {
+            if (primero.getSiguiente() == null) {
+                primero = null;
+                ultimo = null;
+            } else {
+                primero = primero.getSiguiente();
+                primero.setAnterior(null);
+            }
+        }
+    }
+
+    @Override
+    public void eliminarUltimo() {
+        if (!esVacia()) {
+            if (ultimo.getAnterior() == null) {
+                primero = null;
+                ultimo = null;
+            } else {
+                ultimo = ultimo.getAnterior();
+                ultimo.setSiguiente(null);
+            }
+        }
+    }
+
+    @Override
+    public void mostrarLista() {
+        INodo actual = primero;
+        while (actual != null) {
+            System.out.print(actual.getDato() + " <-> ");
+            actual = actual.getSiguiente();
+        }
+        System.out.println("null");
+    }
+}
