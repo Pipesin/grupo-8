@@ -1,0 +1,46 @@
+public class Main {
+    public static void main(String[] args) {
+        Persona[] personas = {
+            new Persona("Carlos", 1001),
+            new Persona("Ana", 1002),
+            new Persona("Bruno", 1003),
+            new Persona("Lucia", 1004),
+            new Persona("Dario", 1005),
+            new Persona("Elena", 1006),
+            new Persona("Felipe", 1007),
+            new Persona("Gonzalo", 1008),
+            new Persona("Hector", 1009),
+            new Persona("Irene", 1010),
+            new Persona("Julia", 1011),
+            new Persona("Karla", 1012),
+            new Persona("Lautaro", 1013),
+            new Persona("Mariana", 1014),
+            new Persona("Nicolas", 1015),
+        };
+
+        System.out.println("Árbol por DNI:");
+        ArbolP arbolDni = new ArbolP(0);
+        for (Persona p : personas) {
+            arbolDni.insertar(p);
+        }
+
+        arbolDni.recorridoInorden();
+        arbolDni.recorridoPreorden();
+        arbolDni.recorridoPostorden();
+
+        System.out.println("\nBuscando persona con DNI 1004:");
+        System.out.println(arbolDni.buscar(new Persona("", 1004)).getDato());
+
+        System.out.println("\nEliminando persona con DNI 1004:");
+        arbolDni.eliminar(new Persona("", 1004));
+        arbolDni.recorridoInorden();
+
+        System.out.println("\nÁrbol por NOMBRE:");
+        ArbolP arbolNombre = new ArbolP(1);
+        for (Persona p : personas) {
+            arbolNombre.insertar(p);
+        }
+
+        arbolNombre.recorridoInorden();
+    }
+}
