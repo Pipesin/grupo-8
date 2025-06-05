@@ -1,0 +1,4 @@
+public interface IPersona {
+    int getDni();
+    String getNombre();
+}
