@@ -1,0 +1,174 @@
+import interfaces.INodo;
+
+public class Nodo implements INodo {
+    private Object dato;
+    private INodo izquierdo;
+    private INodo derecho;
+
+    public Nodo(Object dato) {
+        this.dato = dato;
+        this.izquierdo = null;
+        this.derecho = null;
+    }
+
+    @Override
+    public Object getDato() {
+        return dato;
+    }
+
+    @Override
+    public void setDato(Object dato) {
+        this.dato = dato;
+    }
+
+    @Override
+    public INodo getIzquierdo() {
+        return izquierdo;
+    }
+
+    @Override
+    public void setIzquierdo(INodo izquierdo) {
+        this.izquierdo = izquierdo;
+    }
+
+    @Override
+    public INodo getDerecho() {
+        return derecho;
+    }
+
+    @Override
+    public void setDerecho(INodo derecho) {
+        this.derecho = derecho;
+    }
+}
+ArbolP: import interfaces.IArbolP;
+import interfaces.INodo;
+
+public class ArbolP implements IArbolP {
+    private INodo raiz;
+    private int criterio; // 0 = DNI, 1 = nombre
+
+    public ArbolP(int criterio) {
+        this.raiz = null;
+        this.criterio = criterio;
+    }
+
+    @Override
+    public void insertar(Persona persona) {
+        raiz = insertarRec(raiz, persona);
+    }
+
+    private INodo insertarRec(INodo nodo, Persona persona) {
+        if (nodo == null) {
+            return new Nodo(persona);
+        }
+
+        Persona actual = (Persona) nodo.getDato();
+        if (comparar(persona, actual) < 0) {
+            nodo.setIzquierdo(insertarRec(nodo.getIzquierdo(), persona));
+        } else if (comparar(persona, actual) > 0) {
+            nodo.setDerecho(insertarRec(nodo.getDerecho(), persona));
+        }
+
+        return nodo;
+    }
+
+    private int comparar(Persona a, Persona b) {
+        return criterio == 0
+            ? Integer.compare(a.getDni(), b.getDni())
+            : a.getNombre().compareToIgnoreCase(b.getNombre());
+    }
+
+    @Override
+    public INodo buscar(Persona persona) {
+        return buscarRec(raiz, persona);
+    }
+
+    private INodo buscarRec(INodo nodo, Persona persona) {
+        if (nodo == null) return null;
+
+        Persona actual = (Persona) nodo.getDato();
+        int cmp = comparar(persona, actual);
+        if (cmp == 0) return nodo;
+        if (cmp < 0) return buscarRec(nodo.getIzquierdo(), persona);
+        return buscarRec(nodo.getDerecho(), persona);
+    }
+
+    @Override
+    public void eliminar(Persona persona) {
+        raiz = eliminarRec(raiz, persona);
+    }
+
+private INodo eliminarRec(INodo nodo, Persona persona) {
+        if (nodo == null) return null;
+
+        Persona actual = (Persona) nodo.getDato();
+        int cmp = comparar(persona, actual);
+
+        if (cmp < 0) {
+            nodo.setIzquierdo(eliminarRec(nodo.getIzquierdo(), persona));
+        } else if (cmp > 0) {
+            nodo.setDerecho(eliminarRec(nodo.getDerecho(), persona));
+        } else {
+            if (nodo.getIzquierdo() == null) return nodo.getDerecho();
+            if (nodo.getDerecho() == null) return nodo.getIzquierdo();
+
+            INodo sucesor = encontrarMin(nodo.getDerecho());
+            nodo.setDato(sucesor.getDato());
+            nodo.setDerecho(eliminarRec(nodo.getDerecho(), (Persona) sucesor.getDato()));
+        }
+        return nodo;
+    }
+
+private INodo encontrarMin(INodo nodo) {
+        while (nodo.getIzquierdo() != null) {
+            nodo = nodo.getIzquierdo();
+        }
+        return nodo;
+    }
+
+    @Override
+    public void recorridoInorden() {
+        System.out.println("Inorden:");
+        inorden(raiz);
+        System.out.println();
+    }
+
+    private void inorden(INodo nodo) {
+        if (nodo != null) {
+            inorden(nodo.getIzquierdo());
+            System.out.println(nodo.getDato());
+            inorden(nodo.getDerecho());
+        }
+    }
+
+    @Override
+    public void recorridoPreorden() {
+        System.out.println("Preorden:");
+        preorden(raiz);
+        System.out.println();
+    }
+
+    private void preorden(INodo nodo) {
+        if (nodo != null) {
+            System.out.println(nodo.getDato());
+            preorden(nodo.getIzquierdo());
+            preorden(nodo.getDerecho());
+        }
+    }
+
+    @Override
+    public void recorridoPostorden() {
+        System.out.println("Postorden:");
+        postorden(raiz);
+        System.out.println();
+    }
+
+    private void postorden(INodo nodo) {
+        if (nodo != null) {
+            postorden(nodo.getIzquierdo());
+            postorden(nodo.getDerecho());
+            System.out.println(nodo.getDato());
+        }
+    }
+}
