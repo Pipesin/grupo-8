@@ -1,0 +1,10 @@
+import modelo.Persona;
+
+public interface IArbolP {
+    void insertar(Persona persona);
+    INodo buscar(Persona persona);
+    void eliminar(Persona persona);
+    void recorridoInorden();
+    void recorridoPreorden();
+    void recorridoPostorden();
+}
